@@ -36,47 +36,5 @@
 
 ---
 
-# Features
-
-## Mail
-
-- Plain Text Mail
-- HTML Mail
-- Attachment Support
-- Chinese Subject Decode
-- Chinese Attachment Filename Decode
-
-## Storage
-
-- D1 for Index
-- R2 for Mail Body
-- R2 for Attachments
-- Auto Expiration Cleanup
-
-## UI
-
-- Auto Refresh
-- Countdown Refresh
-- No Flash Refresh
-- Keep Expanded Mail State
-- Toast Copy Notification
-
----
-
-# Tech Stack
-
-- Cloudflare Workers
-- Cloudflare Email Routing
-- Cloudflare D1
-- Cloudflare R2
-
----
-
-# Deploy
-
-## 1. Create D1
-
-Create a D1 database:
-
-```bash
-wrangler d1 create mail_bucket
+# 教程
+-教程没有，复制网址给AI怎么做
