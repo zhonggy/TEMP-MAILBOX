@@ -1,0 +1,16 @@
+name = "email"
+main = "worker.js"
+compatibility_date = "2025-05-20"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mail_bucket"
+database_id = "你的D1_ID"
+
+[[r2_buckets]]
+binding = "MAIL_BUCKET"
+bucket_name = "mail-storage"
+
+[vars]
+MAIL_DOMAIN = "you-domain"
+ACCESS_PASSWORD = "你的访问密码"
