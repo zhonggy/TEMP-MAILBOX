@@ -82,4 +82,4 @@ npx wrangler deploy
 
 ## License
 
-MIT
+[MIT](LICENSE)
