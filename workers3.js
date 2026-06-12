@@ -862,7 +862,9 @@ export default {
     .mail-head{display:flex;justify-content:space-between;gap:12px;cursor:pointer}
     .subject{font-weight:800}
     .meta{font-size:13px;color:#6b7280;margin-top:6px}
-    .body{display:none;margin-top:14px;padding-top:14px;border-top:1px solid #e5e7eb;line-height:1.7;white-space:pre-wrap}
+    .body{display:none;margin-top:14px;padding-top:14px;border-top:1px solid #e5e7eb;line-height:1.7;white-space:pre-wrap;overflow-x:auto;word-break:break-word}
+    .body img,.body video{max-width:100%;height:auto}
+    .body table{max-width:100%!important;table-layout:fixed;word-break:break-word}
     .mail.open .body{display:block}
     .attachment-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
     .attachment-link{background:#111827;color:#fff;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:5px}
@@ -881,6 +883,8 @@ export default {
       .mail-head{flex-direction:column;gap:6px}
       .brand{font-size:18px}
       .attachment-link{font-size:12px;padding:8px 10px}
+      .body{padding:10px 0}
+      .body table{font-size:14px}
     }
   </style>
 </head>
