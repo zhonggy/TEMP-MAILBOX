@@ -1,5 +1,5 @@
 name = "email"
-main = "worker.js"
+main = "workers3.js"
 compatibility_date = "2025-05-20"
 
 [[d1_databases]]
