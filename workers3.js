@@ -1,8 +1,8 @@
 let schemaReadyPromise;
 
 const DEFAULT_MAIL_DOMAIN = "1239999.xyz";
-// 邮件存储时间为 10 年 (10 * 365 * 86400)
-const MAIL_TTL_SECONDS = 315360000; 
+// 邮件存储时间为 7 天 (7 * 24 * 60 * 60)
+const MAIL_TTL_SECONDS = 604800; 
 const MAX_TEXT_LENGTH = 15000;
 const MAX_HTML_LENGTH = 120000;
 const STATS_TIMEZONE = "Asia/Shanghai";
