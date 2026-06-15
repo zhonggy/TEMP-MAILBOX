@@ -1,5 +1,5 @@
 name = "email"
-main = "workers3.js"
+main = "worker.js"
 compatibility_date = "2025-05-20"
 
 [[d1_databases]]
@@ -12,5 +12,6 @@ binding = "MAIL_BUCKET"
 bucket_name = "mail-storage"
 
 [vars]
-MAIL_DOMAIN = "you-domain"
+# 多个域名用英文逗号分隔，第一个为主域名
+MAIL_DOMAINS = "domain1.com,domain2.com,domain3.com"
 ACCESS_PASSWORD = "你的访问密码"
