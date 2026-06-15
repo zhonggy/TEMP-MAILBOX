@@ -90,7 +90,7 @@ export default {
           htmlContent: sanitizedHtml,
           raw,
           attachments: savedAttachments,
-          createdAt: new Date(now).toISOString(),
+          createdAt: this.formatBeijingTime(now),
           expiresAt
         }),
         {
@@ -118,7 +118,7 @@ export default {
         env.MAIL_BUCKET ? "" : textContent,
         env.MAIL_BUCKET ? "" : sanitizedHtml,
         env.MAIL_BUCKET ? r2Key : "",
-        new Date(now).toISOString(),
+        this.formatBeijingTime(now),
         now,
         expiresAt
       )
@@ -233,7 +233,7 @@ export default {
     if (url.pathname === "/api/list") {
       const box = this.normalizeBox(url.searchParams.get("box") || "");
       if (!box) {
-        return this.json({ box, host, emails: [], fetchedAt: new Date().toISOString() });
+        return this.json({ box, host, emails: [], fetchedAt: this.formatBeijingTime(new Date()) });
       }
 
       const nowSeconds = Math.floor(Date.now() / 1000);
@@ -279,7 +279,7 @@ export default {
       }
 
       const stats = await this.getMailStats(env);
-      return this.json({ box, host, emails, fetchedAt: new Date().toISOString(), stats });
+      return this.json({ box, host, emails, fetchedAt: this.formatBeijingTime(new Date()), stats });
     }
 
     const box = this.getBoxFromPath(url.pathname);
@@ -835,6 +835,21 @@ export default {
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  },
+
+  // 格式化为北京时间 (UTC+8)
+  formatBeijingTime(date) {
+    const d = date instanceof Date ? date : new Date(date);
+    if (isNaN(d.getTime())) return "";
+    const offset = 8 * 60; // UTC+8 in minutes
+    const local = new Date(d.getTime() + offset * 60 * 1000);
+    const year = local.getUTCFullYear();
+    const month = String(local.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(local.getUTCDate()).padStart(2, '0');
+    const hours = String(local.getUTCHours()).padStart(2, '0');
+    const minutes = String(local.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(local.getUTCSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   },
 
   getHTML({ box = "", host = "", domains = [], missingDb = false, stats = EMPTY_STATS, authed = true, passwordError = false }) {
