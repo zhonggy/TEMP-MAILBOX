@@ -285,9 +285,12 @@ export default {
     const box = this.getBoxFromPath(url.pathname);
     const stats = await this.getMailStats(env);
 
+    // 从查询参数获取选中的域名，如果没有则使用主域名
+    const selectedDomain = url.searchParams.get("domain") || host;
+
     return new Response(this.getHTML({
       box,
-      host,
+      host: selectedDomain,
       domains,
       missingDb: false,
       stats,
@@ -994,7 +997,8 @@ function setRandom() {
 function openRandom() {
   const text = document.getElementById('randomEmail')?.textContent || '';
   const box = normalizeBox(text);
-  if (box) location.href = '/' + box;
+  const domain = getSelectedDomain();
+  if (box) location.href = '/' + box + '?domain=' + encodeURIComponent(domain);
 }
 
 function copyRandom() {
@@ -1004,7 +1008,8 @@ function copyRandom() {
 
 function openCustom() {
   const box = normalizeBox(document.getElementById('customBox')?.value || '');
-  if (box) location.href = '/' + box;
+  const domain = getSelectedDomain();
+  if (box) location.href = '/' + box + '?domain=' + encodeURIComponent(domain);
 }
 
 async function copyText(text) {
