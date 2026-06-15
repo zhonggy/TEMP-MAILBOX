@@ -20,7 +20,9 @@ const EMPTY_STATS = {
   todayCount: 0,
   last30DaysCount: 0,
   totalCount: 0,
-  currentDbCount: 0
+  currentDbCount: 0,
+  mailboxCount: 0,
+  storageUsed: 0
 };
 
 export default {
@@ -418,11 +420,34 @@ export default {
 
     const dbCountResult = await env.DB.prepare("SELECT COUNT(*) AS currentDbCount FROM emails").first();
 
+    // 获取创建的邮箱数量（distinct box 数量）
+    const mailboxCountResult = await env.DB.prepare("SELECT COUNT(DISTINCT box) AS mailboxCount FROM emails").first();
+
+    // 获取 R2 存储使用量
+    let storageUsed = 0;
+    if (env.MAIL_BUCKET) {
+      try {
+        let cursor;
+        do {
+          const listResult = await env.MAIL_BUCKET.list({ cursor, limit: 1000 });
+          for (const obj of listResult.objects) {
+            storageUsed += obj.size || 0;
+          }
+          cursor = listResult.truncated ? listResult.cursor : undefined;
+        } while (cursor);
+      } catch {
+        // 如果 R2 查询失败，使用估算值
+        storageUsed = -1;
+      }
+    }
+
     return {
       todayCount: Number(result?.todayCount || 0),
       last30DaysCount: Number(result?.last30DaysCount || 0),
       totalCount: Number(result?.totalCount || 0),
-      currentDbCount: Number(dbCountResult?.currentDbCount || 0)
+      currentDbCount: Number(dbCountResult?.currentDbCount || 0),
+      mailboxCount: Number(mailboxCountResult?.mailboxCount || 0),
+      storageUsed: storageUsed
     };
   },
 
@@ -837,6 +862,23 @@ export default {
       .replace(/'/g, "&#39;");
   },
 
+  // 格式化存储大小
+  formatStorageSize(bytes) {
+    if (bytes < 0) return "计算中...";
+    if (bytes === 0) return "0 B";
+
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    let unitIndex = 0;
+    let size = bytes;
+
+    while (size >= 1024 && unitIndex < units.length - 1) {
+      size /= 1024;
+      unitIndex++;
+    }
+
+    return `${size.toFixed(2)} ${units[unitIndex]}`;
+  },
+
   // 格式化为北京时间 (UTC+8)
   formatBeijingTime(date) {
     const d = date instanceof Date ? date : new Date(date);
@@ -979,6 +1021,11 @@ export default {
       ` : ""}
     </div>
 
+    <div class="stats-info" style="text-align:center;color:#6b7280;font-size:13px;margin:16px 0;line-height:1.8">
+      已创建 <strong style="color:#2563eb">${stats.mailboxCount}</strong> 个邮箱 ·
+      共接收 <strong style="color:#2563eb">${stats.totalCount}</strong> 封邮件 ·
+      已使用 <strong style="color:#2563eb">${this.formatStorageSize(stats.storageUsed)}</strong> 存储
+    </div>
     <div class="footer">© 2026 愿你收到的每一封邮件，都带着期待与惊喜。</div>
   </div>
 
