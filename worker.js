@@ -972,7 +972,6 @@ export default {
         <span class="material-icons">mail</span>
         <span>临时邮箱</span>
       </a>
-      <span>TEMP MAILBOX</span>
     </div>
 
     <div class="card">
