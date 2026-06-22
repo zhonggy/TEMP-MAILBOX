@@ -1020,11 +1020,13 @@ export default {
       ` : ""}
     </div>
 
+    ${!missingDb && authed && !box ? `
     <div class="stats-info" style="text-align:center;color:#6b7280;font-size:13px;margin:16px 0;line-height:1.8">
       已创建 <strong style="color:#2563eb">${stats.mailboxCount}</strong> 个邮箱 ·
       共接收 <strong style="color:#2563eb">${stats.totalCount}</strong> 封邮件 ·
       已使用 <strong style="color:#2563eb">${this.formatStorageSize(stats.storageUsed)}</strong> 存储
     </div>
+    ` : ""}
     <div class="footer">© 2026 愿你收到的每一封邮件，都带着期待与惊喜。</div>
   </div>
 
